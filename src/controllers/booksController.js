@@ -1,39 +1,53 @@
 const booksMethods = require('../models/booksModel')
 
-const getBooks = async(req,res) =>{
-    try{
-        const books = await booksMethods.getBooks()
-        res.send(200).json(books)
+const getBooks = async (req, res) => {
+    try {
+        const books = await  booksMethods.getBooks();
+        res.status(200).json(books);
+    } catch (error) {
+        console.error('Erro ao buscar livros:', error);
+        res.status(500).json({ message: 'error to find the book' });
     }
-    catch (error){
-        res.status(500).json({message: 'erro trying getting book'})
-    }
-}
+};
 
-const getBooksId = async(req,res) =>{
-    try{
-        const books = await booksMethods.getBooksByid(req.body.id)
-        res.send(200).json(books)
+const getBooksId = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const book = await  booksMethods.getBooksByid(id);
+        if (!book) {
+            return res.status(404).json({ message: 'book not found' });
+        }
+        res.status(200).json(book);
+    } catch (error) {
+        console.error('Error trying find book by id:', error);
+        res.status(500).json({ message: 'error book not find' });
     }
-    catch (error){
-        res.status(500).json({message: 'erro trying getting book'})
-    }
-}
+};
 
 const putBooks = async(req,res) =>{
     try{
-        const books = await booksMethods.updateBook(req.body.id)
+        const {name,author,description,page_number,category} =req.body
+        const books = await booksMethods.updateBook(req.params.id,name,author,description,page_number,category)
+
+        if (!books) {
+            return res.status(404).json({ message: 'book not found' });
+        }
+
         res.send(200).json(books)
     }
     catch (error){
-        res.sen.status(500).json({message: 'error trying to update the book'})
+        if (!res.headersSent) {
+            return res.status(500).json({ message: 'Error trying to update the book' });
+        }
     }
 }
 
 const deleteBooks = async(req,res) =>{
+    
     try{
-        const books = await booksMethods.deleteBook(req.body.id);
-        res.send(200).json(books)
+        const { id } = req.params;
+        const book = await  booksMethods.deleteBook(id);
+        res.send(200).json(book)
 
     }catch (error){
         res.status(500).json({message: 'error trying delete book'})
@@ -42,8 +56,9 @@ const deleteBooks = async(req,res) =>{
 
 const postBooks = async(req,res) =>{
     try{
-        const books = await booksMethods.createeBook();
-        res.send(200).json(books)
+        const {name, author, description, page_number, category} =req.body
+        const books = await booksMethods.createeBook(name, author, description, page_number, category);
+        res.send(201).json(books)
     }
     catch (error){
         res.status(500).json({message: 'error trying to create book'})
