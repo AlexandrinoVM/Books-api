@@ -1,9 +1,9 @@
 const getBooks =('/books',(req,res)=>{
     const {name,author,launch } = req.params.body  
-    res.json()
+    res.json({message: 'List of itens'})
 })
 
 
-const setBooks =('/books',(req,res)=>{
+const postBooks =('/books',(req,res)=>{
     
 }) 
