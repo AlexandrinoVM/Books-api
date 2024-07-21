@@ -37,7 +37,7 @@ A simple Book API using Node.js, Express e PostgreSQL.
     page_number INTEGER,
     category VARCHAR(100)
     );
-   ``
+   ```
    
 
 ## Use
@@ -45,7 +45,7 @@ A simple Book API using Node.js, Express e PostgreSQL.
 1. init the server:
     ```bash
     npm run dev
-    ``
+    ```
 
 2. The API is running on `http://localhost:3000`.
 
